@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Отметка уборки</title>
+  <style>
+    body{font-family:Arial;text-align:center;margin-top:40px;}
+    button{font-size:22px;padding:15px 35px;border:0;border-radius:10px;color:#fff;cursor:pointer}
+    .green{background:#4CAF50}
+    .red{background:#F44336}
+    .gray{background:#999}
+    #msg{margin-top:18px;font-size:18px}
+  </style>
+</head>
+<body>
+
+  <h2 id="title">Отметка</h2>
+  <div id="subtitle"></div>
+
+  <br>
+
+  <button id="inBtn" class="green" onclick="mark('in')">✅ ПРИШЛА</button>
+  <br><br>
+  <button id="outBtn" class="red" onclick="mark('out')">🚪 УШЛА</button>
+
+  <div id="msg"></div>
+
+<script>
+  // ВСТАВЬ СЮДА СВОЙ /exec
+  const API_BASE = "https://script.google.com/macros/s/AKfycbw4EUYY5WQqMwkrX0ZGpKKV6SbyG4oUY7U2C74-RgevMiKeIbrJ5pRuH_Y2NAFFeG9I/exec";
+
+  const params = new URLSearchParams(location.search);
+  const w = params.get("w") || "";
+  const f = params.get("f") || "";
+
+  document.getElementById("title").textContent = w ? ("Уборщица №" + w) : "Отметка";
+  document.getElementById("subtitle").textContent = f ? ("Этаж " + f) : "";
+
+  function mark(type){
+    if(!w || !f){
+      setMsg("❌ Нет w или f в ссылке");
+      return;
+    }
+
+    disableButtons();
+
+    const url = API_BASE + "?w=" + encodeURIComponent(w)
+                      + "&f=" + encodeURIComponent(f)
+                      + "&t=" + encodeURIComponent(type)
+                      + "&_=" + Date.now();
+
+    const img = new Image();
+    img.onload = () => setMsg("✅ Отмечено");
+    img.onerror = () => { setMsg("⚠️ Не отправилось (проверь интернет)"); enableButtons(); };
+    img.src = url;
+  }
+
+  function setMsg(t){ document.getElementById("msg").textContent = t; }
+
+  function disableButtons(){
+    inBtn.disabled = true; outBtn.disabled = true;
+    inBtn.className = "gray"; outBtn.className = "gray";
+  }
+  function enableButtons(){
+    inBtn.disabled = false; outBtn.disabled = false;
+    inBtn.className = "green"; outBtn.className = "red";
+  }
+</script>
+
+</body>
+</html>
