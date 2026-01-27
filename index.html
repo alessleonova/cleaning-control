@@ -27,46 +27,68 @@
   <div id="msg"></div>
 
 <script>
-  // ВСТАВЬ СЮДА СВОЙ /exec
-  const API_BASE = "https://script.google.com/macros/s/AKfycbw4EUYY5WQqMwkrX0ZGpKKV6SbyG4oUY7U2C74-RgevMiKeIbrJ5pRuH_Y2NAFFeG9I/exec";
 
-  const params = new URLSearchParams(location.search);
-  const w = params.get("w") || "";
-  const f = params.get("f") || "";
+const API_BASE = "ТУТ_ТВОЙ_EXEC_URL"; // НЕ ТРОГАЙ, у тебя уже стоит
 
-  document.getElementById("title").textContent = w ? ("Уборщица №" + w) : "Отметка";
-  document.getElementById("subtitle").textContent = f ? ("Этаж " + f) : "";
+const params = new URLSearchParams(location.search);
+const w = params.get("w") || "";
+const f = params.get("f") || "";
 
-  function mark(type){
-    if(!w || !f){
-      setMsg("❌ Нет w или f в ссылке");
-      return;
-    }
+document.getElementById("title").textContent =
+  w ? ("Уборщица №" + w) : "Отметка";
 
-    disableButtons();
+document.getElementById("subtitle").textContent =
+  f ? ("Этаж " + f) : "";
 
-    const url = API_BASE + "?w=" + encodeURIComponent(w)
-                      + "&f=" + encodeURIComponent(f)
-                      + "&t=" + encodeURIComponent(type)
-                      + "&_=" + Date.now();
+function mark(type){
 
-    const img = new Image();
-    img.onload = () => setMsg("✅ Отмечено");
-    img.onerror = () => { setMsg("⚠️ Не отправилось (проверь интернет)"); enableButtons(); };
-    img.src = url;
+  if(!w || !f){
+    showMsg("❌ Нет данных в ссылке");
+    return;
   }
 
-  function setMsg(t){ document.getElementById("msg").textContent = t; }
+  disable();
 
-  function disableButtons(){
-    inBtn.disabled = true; outBtn.disabled = true;
-    inBtn.className = "gray"; outBtn.className = "gray";
-  }
-  function enableButtons(){
-    inBtn.disabled = false; outBtn.disabled = false;
-    inBtn.className = "green"; outBtn.className = "red";
-  }
+  const url =
+    API_BASE +
+    "?w=" + encodeURIComponent(w) +
+    "&f=" + encodeURIComponent(f) +
+    "&t=" + encodeURIComponent(type) +
+    "&_=" + Date.now();
+
+  const img = new Image();
+
+  img.onload = () => {
+    showSuccess();
+  };
+
+  img.src = url;
+}
+
+
+function disable(){
+
+  inBtn.disabled = true;
+  outBtn.disabled = true;
+
+  inBtn.style.display = "none";
+  outBtn.style.display = "none";
+}
+
+
+function showSuccess(){
+
+  document.getElementById("msg").innerHTML =
+    "✅ <b>Отправлено</b><br>Можно закрыть страницу";
+
+}
+
+function showMsg(t){
+  document.getElementById("msg").innerHTML = t;
+}
+
 </script>
 
 </body>
+
 </html>
