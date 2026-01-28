@@ -47,7 +47,7 @@ function mark(type){
     return;
   }
 
-  disable();
+  disable(); // скрыли кнопки
 
   const url =
     API_BASE +
@@ -56,15 +56,13 @@ function mark(type){
     "&t=" + encodeURIComponent(type) +
     "&_=" + Date.now();
 
+  // отправляем "тихо"
   const img = new Image();
-
-  img.onload = () => {
-    showSuccess();
-  };
-
   img.src = url;
-}
 
+  // СРАЗУ показываем успех
+  showSuccess();
+}
 
 function disable(){
 
@@ -92,5 +90,6 @@ function showMsg(t){
 </body>
 
 </html>
+
 
 
