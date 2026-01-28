@@ -34,18 +34,21 @@ const params = new URLSearchParams(location.search);
 const w = params.get("w") || "";
 const f = params.get("f") || "";
 
-document.getElementById("title").textContent =
-  w ? ("Сотрудник №" + w) : "Отметка";
-
-document.getElementById("subtitle").textContent =
-  f ? ("Этаж " + f) : "";
+document.getElementById("title").innerHTML =
+w
+? ("Сотрудник №" + w + "<br><span style='font-size:16px;color:gray'>Қызметкер №" + w + "</span>")
+: "Отметка";
+  
+document.getElementById("subtitle").innerHTML =
+f
+? ("Этаж " + f + "<br><span style='font-size:15px;color:gray'>Қабат " + f + "</span>")
+: "";
 
 function mark(type){
 
-  if(!w || !f){
-    showMsg("❌ Нет данных в ссылке");
-    return;
-  }
+if(!w || !f){
+showMsg("❌ Нет данных в ссылке<br>❌ Сілтемеде дерек жоқ");
+return;
 
   disable(); // скрыли кнопки
 
@@ -73,12 +76,14 @@ function disable(){
   outBtn.style.display = "none";
 }
 
-
 function showSuccess(){
 
-  document.getElementById("msg").innerHTML =
-    "✅ <b>Отправлено</b><br>Можно закрыть страницу";
 
+document.getElementById("msg").innerHTML =
+"✅ <b>Отправлено</b><br>" +
+"<span style='font-size:15px;color:gray'>Жіберілді</span><br><br>" +
+"Можно закрыть страницу<br>" +
+"<span style='font-size:14px;color:gray'>Бетті жабуға болады</span>";
 }
 
 function showMsg(t){
@@ -90,6 +95,7 @@ function showMsg(t){
 </body>
 
 </html>
+
 
 
 
