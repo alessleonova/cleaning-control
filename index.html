@@ -4,54 +4,99 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Отметка уборки</title>
+
   <style>
-    body{font-family:Arial;text-align:center;margin-top:40px;}
-    button{font-size:22px;padding:15px 35px;border:0;border-radius:10px;color:#fff;cursor:pointer}
-    .green{background:#4CAF50}
-    .red{background:#F44336}
-    .gray{background:#999}
-    #msg{margin-top:18px;font-size:18px}
+    body{
+      font-family:Arial;
+      text-align:center;
+      margin-top:40px;
+    }
+
+    button{
+      font-size:22px;
+      padding:15px 35px;
+      border:0;
+      border-radius:10px;
+      color:#fff;
+      cursor:pointer;
+      width:260px;
+    }
+
+    .green{background:#4CAF50;}
+    .red{background:#F44336;}
+    .gray{background:#999;}
+
+    #msg{
+      margin-top:25px;
+      font-size:18px;
+      line-height:1.4;
+    }
   </style>
 </head>
+
+
 <body>
 
-  <h2 id="title">Отметка</h2>
+  <h2 id="title"></h2>
   <div id="subtitle"></div>
 
   <br>
 
-  <button id="inBtn" class="green" onclick="mark('in')">✅ ПРИШЛА</button>
+  <button id="inBtn" class="green" onclick="mark('in')">
+    🟢 Начало уборки<br>
+    Тазалау басталды
+  </button>
+
   <br><br>
-  <button id="outBtn" class="red" onclick="mark('out')">🚪 УШЛА</button>
+
+  <button id="outBtn" class="red" onclick="mark('out')">
+    🔴 Конец уборки<br>
+    Тазалау аяқталды
+  </button>
 
   <div id="msg"></div>
 
+
 <script>
 
-const API_BASE = "https://script.google.com/macros/s/AKfycbw4EUYY5WQqMwkrX0ZGpKKV6SbyG4oUY7U2C74-RgevMiKeIbrJ5pRuH_Y2NAFFeG9I/exec"; // НЕ ТРОГАЙ, у тебя уже стоит
+const API_BASE =
+"https://script.google.com/macros/s/AKfycbw4EUYY5WQqMwkrX0ZGpKKV6SbyG4oUY7U2C74-RgevMiKeIbrJ5pRuH_Y2NAFFeG9I/exec";
+// ↑ НЕ МЕНЯЙ, у тебя уже рабочий
 
+
+// ===== параметры из ссылки =====
 const params = new URLSearchParams(location.search);
+
 const w = params.get("w") || "";
 const f = params.get("f") || "";
 
+
+// ===== заголовок =====
 document.getElementById("title").innerHTML =
 w
-? ("Сотрудник №" + w + "<br><span style='font-size:16px;color:gray'>Қызметкер №" + w + "</span>")
+? ("Сотрудник №" + w + "<br>Қызметкер №" + w)
 : "Отметка";
-  
+
+
+// ===== этаж =====
 document.getElementById("subtitle").innerHTML =
 f
-? ("Этаж " + f + "<br><span style='font-size:15px;color:gray'>Қабат " + f + "</span>")
+? ("Этаж " + f + "<br>Қабат " + f)
 : "";
 
+
+
+
+// ===== нажатие кнопки =====
 function mark(type){
 
   if(!w || !f){
-    showMsg("❌ Нет данных в ссылке<br>❌ Сілтемеде дерек жоқ");
+    showMsg("❌ Нет данных<br>❌ Дерек жоқ");
     return;
   }
 
-  disable(); // скрыли кнопки
+  disableButtons();
+
 
   const url =
     API_BASE +
@@ -60,15 +105,20 @@ function mark(type){
     "&t=" + encodeURIComponent(type) +
     "&_=" + Date.now();
 
-  // отправляем "тихо"
+
+  // тихая отправка
   const img = new Image();
   img.src = url;
 
-  // СРАЗУ показываем успех
+
   showSuccess();
 }
 
-function disable(){
+
+
+
+// ===== блокировка кнопок =====
+function disableButtons(){
 
   inBtn.disabled = true;
   outBtn.disabled = true;
@@ -77,30 +127,29 @@ function disable(){
   outBtn.style.display = "none";
 }
 
+
+
+
+// ===== сообщение успеха =====
 function showSuccess(){
 
-
-document.getElementById("msg").innerHTML =
-"✅ <b>Отправлено</b><br>" +
-"<span style='font-size:15px;color:gray'>Жіберілді</span><br><br>" +
-"Можно закрыть страницу<br>" +
-"<span style='font-size:14px;color:gray'>Бетті жабуға болады</span>";
+  document.getElementById("msg").innerHTML =
+    "✅ Отправлено<br>" +
+    "Жіберілді<br><br>" +
+    "Можно закрыть страницу<br>" +
+    "Бетті жабуға болады";
 }
 
+
+
+// ===== сообщение ошибки =====
 function showMsg(t){
+
   document.getElementById("msg").innerHTML = t;
+
 }
 
 </script>
 
 </body>
-
 </html>
-
-
-
-
-
-
-
-
